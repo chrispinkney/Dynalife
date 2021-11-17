@@ -34,7 +34,7 @@ impl Player {
                 VirtualKeyCode::S => Point::new(0, 1),
                 VirtualKeyCode::A => Point::new(-1, 0),
                 VirtualKeyCode::D => Point::new(1, 0),
-                _ => Point::zero()
+                _ => Point::zero(),
             };
 
             let new_position = self.position + delta;

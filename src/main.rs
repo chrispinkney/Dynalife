@@ -1,21 +1,21 @@
 mod map;
-mod player;
 mod map_builder;
+mod player;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub use crate::map::*;
-    pub use crate::player::*;
     pub use crate::map_builder::*;
+    pub use crate::player::*;
 }
 
 use prelude::*;
 
 struct State {
     map: Map,
-    player: Player
+    player: Player,
 }
 
 impl State {
@@ -23,7 +23,6 @@ impl State {
         Self {
             map: Map::new(), // generate a map
             player: Player::new(Point::new(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)),
-
         }
     }
 }
