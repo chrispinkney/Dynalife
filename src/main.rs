@@ -1,22 +1,27 @@
 mod map;
+mod player;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub use crate::map::*;
+    pub use crate::player::*;
 }
 
 use prelude::*;
 
 struct State {
     map: Map,
+    player: Player
 }
 
 impl State {
     fn new() -> Self {
         Self {
             map: Map::new(), // generate a map
+            player: Player::new(Point::new(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)),
+
         }
     }
 }
@@ -25,8 +30,9 @@ impl GameState for State {
     // provides a window into the currently running bracket-terminal—accessing information like mouse position and keyboard input, and sending commands to draw to the window.
     fn tick(&mut self, ctx: &mut BTerm) {
         ctx.cls(); // clears the game window every tick
-                   // ctx.print(1, 1, "Hello World"); // just prints text to the screen @ location 1,1
-        self.map.render(ctx);
+        self.player.update(ctx, &self.map); // update player location every tick
+        self.map.render(ctx); // render the map every tick
+        self.player.render(ctx); // render the player every tick
     }
 }
 
