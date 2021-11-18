@@ -1,12 +1,14 @@
 mod map;
 mod map_builder;
 mod player;
+mod camera;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::player::*;
+    pub use crate::camera::*;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
@@ -18,6 +20,7 @@ use prelude::*;
 struct State {
     map: Map,
     player: Player,
+    camera: Camera,
 }
 
 impl State {
@@ -28,6 +31,7 @@ impl State {
         Self {
             map : map_builder.map,
             player: Player::new(map_builder.player_start),
+            camera: Camera::new(map_builder.player_start),
         }
     }
 }
@@ -35,10 +39,13 @@ impl State {
 impl GameState for State {
     // provides a window into the currently running bracket-terminal—accessing information like mouse position and keyboard input, and sending commands to draw to the window.
     fn tick(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(0);
         ctx.cls(); // clears the game window every tick
-        self.player.update(ctx, &self.map); // update player location every tick
-        self.map.render(ctx); // render the map every tick
-        self.player.render(ctx); // render the player every tick
+        ctx.set_active_console(1);
+        ctx.cls(); // clears the game window every tick
+        self.player.update(ctx, &self.map, &mut self.camera); // update player location and camera every tick
+        self.map.render(ctx, &self.camera); // render the map and camera every tick
+        self.player.render(ctx, &self.camera); // render the player and camera every tick
     }
 }
 
